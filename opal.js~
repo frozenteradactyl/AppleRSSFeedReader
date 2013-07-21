@@ -1,0 +1,10 @@
+var context = {
+    people: [
+{name: 'Matt', country: 'NZ'},
+{name: 'Pete', country: 'AU'}
+  ]
+}
+
+    jsonQuery('people[country=NZ].name', {
+	    rootContext: context
+		}) //=> {value: 'Matt', parents: [...], key: 0} ... etc

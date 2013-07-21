@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="salamander.js"></script>
+    <script type="text/javascript">
+
+    google.load("feeds", "1");
+
+    function initialize() {
+      var zero = "https://itunes.apple.com/us/rss/newpaidapplications/limit=10/xml";
+      var one = "http://itunes.apple.com/us/rss/topalbums/limit=10/genre=1007/xml";
+      var oneone = "https://itunes.apple.com/us/rss/newpaidapplications/limit=300/xml";
+      var two = "http://fastpshb.appspot.com/feed/1/fastpshb";
+      var myRe = /Price\:<\/b>\s[\$]\d+(\.\d\d)?/;
+      var myRePr = /Price\:<\/b>\s[\$]\d+\.\d\d/;
+      var feed = new google.feeds.Feed(oneone);
+      //var theJSONentry = {"data": []};
+      var theJSONentry = [];
+      feed.load(function(result) {
+        if (!result.error) {
+          var container = document.getElementById("feed");
+          for (var i = 0; i < result.feed.entries.length; i++) {
+            var entry = result.feed.entries[i];
+            var div = document.createElement("div");
+            var price = (entry.content.match(myRePr));
+	    var price2 = String(price).replace("Price:</b> ","");
+	    var space = ", ";
+	    var rec1 = "";
+	    rec1 = String(entry.title).concat(space).concat(Date(entry.publishedDate)).concat(space).concat(price2);
+	    //div.appendChild(document.createTextNode(entry.title));
+	    //div.appendChild(document.createTextNode(space));
+	    //div.appendChild(document.createTextNode(Date(entry.publishedDate)));
+	    //div.appendChild(document.createTextNode(space));
+	    //div.appendChild(document.createTextNode(entry.content));
+            //div.appendChild(document.createTextNode(price2));
+	    div.appendChild(document.createTextNode(rec1));
+	    container.appendChild(div);
+            //theJSONentry.push({title: entry.title, ts: Date(entry.publishedDate), price: price2});
+	    //myFunction();
+            addtohist(entry.title, entry.publishedDate, price2);
+          }
+        }
+      });
+    }
+    google.setOnLoadCallback(initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="feed"></div>
+  </body>
+</html>

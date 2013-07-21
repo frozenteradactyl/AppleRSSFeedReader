@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+table {width:400px; border-style:groove;}
+td {border-style:solid; border-width:thin;}
+</style>
+</head>
+<body>
+<h1>this is the view</h1>
+<div id="display"></div>
+<div id="feed"></div>
+<script type="text/javascript" src="homepage.js">
+</script>
+<script type="text/javascript">
+<!-- add javascript here that calls generate_table and populates the -->
+<!-- display div above.  can be done with one line of code. -->
+  document.getElementById("display").innerHTML=generate_table();
+</script>
+<script type="text/javascript" src="https://www.google.com/jsapi">
+google.load("feeds", "1");
+var feed = new google.feeds.Feed("http://itunes.apple.com/rss");
+feed.load(function(result) {
+    if (!result.error) {
+      var container = document.getElementById("feed");
+      for (var i = 0; i < result.feed.entries.length; i++) {
+        var entry = result.feed.entries[i];
+        var div = document.createElement("div");
+        div.appendChild(document.createTextNode(entry.title));
+        container.appendChild(div);
+        }
+      }
+    });
+  }
+</script>
+</body>
+</html>

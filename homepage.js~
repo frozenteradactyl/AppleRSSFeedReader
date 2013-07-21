@@ -1,0 +1,152 @@
+/*
+
+The model-view-controller (MVC) paradigm is important in web
+frameworks like Ruby on Rails.  Roughly speaking, a model is a class
+that abstracts a table, with each instance representing a row in the
+table, a view is an html template, and a controller is the class that
+passes data back and forth between models and views.  In this exercise
+we have a similar MVC setup.  In this file, the global variable db is
+a model, with an internal data set and accessor functions.  The
+generate_table function and the other file, mvc-problem.html, contain
+the view code, and the line of javascript to be added in
+mvc-problem.html is basically the controller code.
+
+The purpose of this problem is to check for errors in a database.
+Here are the steps:
+
+1.  First just make the code functional.  You'll need to add
+javascript to mvc-problem.html, probably just one line of code, that
+reads data from db, passes it through generate_table to produce a
+string, and then add that string to the <div id="display"> element.
+You can use one of the provided accessor functions in the db object,
+and you'll probably need to look up the right javascript code to add
+content to html (I had to look it up).  Once you've added code to that
+file and pointed your web browser to it, you should see the data below
+displayed.  As long as this file is in the same directory as the html
+file, the browser will load it as well.
+
+2.  Next, place the data in an html table.  Currently, generate_table
+just converts an object to a string, but you should change the code to
+produce a table, with one data entry per row.
+
+3.  Finally, the primary assignment: check the data for errors.  Each
+database entry stores a string, the length of that string, and a type
+for that string, but the length and type could be incorrect.  You
+should write code that checks for errors, and only displays those
+entries that are incorrect; that is, only display table rows where the
+data contents do not meet the specifications.  In the sample data
+below, the first four entries are correct, and the last four entries
+are incorrect, so your code should only display the last four entries.
+You can add more entries to the data in order to test your code.  When
+you return the code to us, we will replace the data array with a much
+larger data sample to test your code, and you will be evaluated based
+on how many errors you find (as well as how you write code generally).
+
+The string types are defined as follows:
+
+word: only English letters are allowed, no other characters.
+
+integer: only digits, with an optional minus sign as the first
+  character.
+
+float: digits and exactly one period.  digits to the left of the
+  period are optional.  the first character may be a minus sign.
+  scientific notation is optional, so the string may end with the
+  letter e or E, followed by an optional minus sign, followed by one
+  or more digits.  no whitespace or other characters, only digits,
+  hyphens, a period, and the letter e/E is allowed.
+
+unknown: any string that doesn't match one of the other types.
+
+no other types are allowed.
+
+*/
+
+//var db is the model
+var db = function(){
+    var data = [
+	{ string: 'string', length: 6, type: 'word' },
+	{ string: '123', length: 3, type: 'integer' },
+	{ string: '0.1', length: 3, type: 'float' },
+	{ string: 'no good', length: 7, type: 'unknown' },
+	{ string: 'strings', length: 6, type: 'word' },
+	{ string: 'word', length: 4, type: 'unknown' },
+	{ string: '-123', length: 4, type: 'word' },
+        { string: '+123', length: 4, type: 'integer' },
+        { string: '+338990020', length: 9, type: 'word'},
+        { string: '33,614.28', length: 9, type: 'float'},
+        { string: '44,150', length: 6, type: 'integer' },
+        { string: '+1235', length: 4, type: 'integer' },
+        { string: 'hells-kitchen', length: 13, type: 'word' }
+	// add further test data if desired
+    ];
+    // the returned object becomes the value of db
+    // add code to the object as needed
+    return {
+	find: function(n){
+	    return [ data[n] ];
+	},
+	find_all: function(){
+	    return data;
+	},
+	leni: function(){
+	    return data.length;
+	},
+	stri: function(n){
+	    return data[n].string;
+	},
+	lenii: function(n){
+	    return data[n].length;
+	},
+	typi: function(n){
+	    return data[n].type;
+	},
+	typo: function(n){
+	    var re = /[a-z]+|[A-Z]+/;
+	    var re2 = /^[a-zA-Z-_]+$/;
+	    var re3 = /^ *[0-9]+,+[0-9]+ *$/;
+	    var re4 = /^ *[\+|\-]*[0-9]+ *$/;
+	    var re5 = /^ *[\+|\-]*[0-9]+[\.|,][0-9]+/;
+		if(re2.exec(data[n].string)) {
+		  return "word";
+	        }
+	        if(re3.exec(data[n].string)) {
+		  return "integer";
+		}
+		if(re4.exec(data[n].string)) {
+		  return "integer";
+		}
+		if(re5.exec(data[n].string)) {
+		  return "float";
+		}
+		else {
+		  return "unknown";
+		}
+	},
+	lenis: function(n) {
+	    var tempy = String(data[n].string);
+	    var holder = -1;
+	    var molder = -1;
+	    holder = tempy.indexOf("+");
+	    molder = tempy.indexOf("-");
+	    if(holder == 0 || molder == 0) {
+	      return tempy.length - 1;
+	    } else {
+	      return tempy.length;
+	    }
+	}
+    };
+}();
+
+// returns an html table
+// generate_table is the controller
+var generate_table = function(obj){
+    var pong = db.leni(); 
+    var bong = "<table><tr><th>value<th>length<th>type<th>typeof<th>actlen";
+    for (var i = 0; i < pong; i++) {
+	if (db.lenii(i) != db.lenis(i) || db.typi(i) != db.typo(i)) {
+	  bong = bong + "<tr><td>" + db.stri(i) + "<td>" + db.lenii(i) + "<td>" + db.typi(i) + "<td>" + db.typo(i) + "<td>" + db.lenis(i);
+	}
+    }
+    return(bong);
+};

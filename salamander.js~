@@ -1,0 +1,106 @@
+/*
+So here’s your challenge!
+You can see on our site that we don’t sell any iPhone apps. It would be great if we did, but Apple doesn’t allow coupons so we simply can’t do it the same way we sell desktop software.
+ 
+What apple does allow is developers to change the price of their iPhone app on a daily basis.
+They also publish RSS feeds of all the apps here:
+http://itunes.apple.com/rss
+ 
+What we want is to have a page on BitsDuJour listing all the iPhone apps that have dropped their price in the last 24 hours.
+ 
+Your challenge is to tell us how you would build it, using whatever technology you think would be best, and be as detailed as possible.
+ 
+Deadline is Monday 22nd – please leave the subject line as-is in your reply.
+ 
+Good luck! – and you probably guessed that we actually do want to build this, so your reply counts.
+ 
+*/
+
+//var db is the model
+var db = function(){
+    var data = [
+	{ string: 'string', length: 6, type: 'word' },
+	{ string: '123', length: 3, type: 'integer' },
+	{ string: '0.1', length: 3, type: 'float' },
+	{ string: 'no good', length: 7, type: 'unknown' },
+	{ string: 'strings', length: 6, type: 'word' },
+	{ string: 'word', length: 4, type: 'unknown' },
+	{ string: '-123', length: 4, type: 'word' },
+        { string: '+123', length: 4, type: 'integer' },
+        { string: '+338990020', length: 9, type: 'word'},
+        { string: '33,614.28', length: 9, type: 'float'},
+        { string: '44,150', length: 6, type: 'integer' },
+        { string: '+1235', length: 4, type: 'integer' },
+        { string: 'hells-kitchen', length: 13, type: 'word' }
+	// add further test data if desired
+    ];
+    // the returned object becomes the value of db
+    // add code to the object as needed
+    return {
+	find: function(n){
+	    return [ data[n] ];
+	},
+	find_all: function(){
+	    return data;
+	},
+	leni: function(){
+	    return data.length;
+	},
+	stri: function(n){
+	    return data[n].string;
+	},
+	lenii: function(n){
+	    return data[n].length;
+	},
+	typi: function(n){
+	    return data[n].type;
+	},
+	typo: function(n){
+	    var re = /[a-z]+|[A-Z]+/;
+	    var re2 = /^[a-zA-Z-_]+$/;
+	    var re3 = /^ *[0-9]+,+[0-9]+ *$/;
+	    var re4 = /^ *[\+|\-]*[0-9]+ *$/;
+	    var re5 = /^ *[\+|\-]*[0-9]+[\.|,][0-9]+/;
+		if(re2.exec(data[n].string)) {
+		  return "word";
+	        }
+	        if(re3.exec(data[n].string)) {
+		  return "integer";
+		}
+		if(re4.exec(data[n].string)) {
+		  return "integer";
+		}
+		if(re5.exec(data[n].string)) {
+		  return "float";
+		}
+		else {
+		  return "unknown";
+		}
+	},
+	lenis: function(n) {
+	    var tempy = String(data[n].string);
+	    var holder = -1;
+	    var molder = -1;
+	    holder = tempy.indexOf("+");
+	    molder = tempy.indexOf("-");
+	    if(holder == 0 || molder == 0) {
+	      return tempy.length - 1;
+	    } else {
+	      return tempy.length;
+	    }
+	}
+    };
+}();
+
+// returns an html table
+// generate_table is the controller
+var generate_table = function(obj){
+    var pong = db.leni(); 
+    var bong = "<table><tr><th>value<th>length<th>type<th>typeof<th>actlen";
+    for (var i = 0; i < pong; i++) {
+	if (db.lenii(i) != db.lenis(i) || db.typi(i) != db.typo(i)) {
+	  bong = bong + "<tr><td>" + db.stri(i) + "<td>" + db.lenii(i) + "<td>" + db.typi(i) + "<td>" + db.typo(i) + "<td>" + db.lenis(i);
+	}
+    }
+    return(bong);
+};

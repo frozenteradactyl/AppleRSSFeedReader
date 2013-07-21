@@ -1,0 +1,13 @@
+var fs = require('fs');
+var theJSONentry2 = [];
+var outputFilename = 'the.json';
+
+theJSONentry2.push({title: "Blade Runner", ts: "11:25", price: "3.99"});
+
+fs.writeFile(outputFilename, JSON.stringify(theJSONentry2, null, 4), function(err) {                                                                     
+	if(err) {                                                                                                                                            
+	  console.log(err);                                                                                                                                      
+	} else {                                                                                                                                             
+	  console.log("JSON saved to ");                                                                                                                         
+	}                                                                                                                                                    
+});

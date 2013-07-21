@@ -1,0 +1,7 @@
+{
+  people:
+  [
+{name: 'Matt', country: 'NZ'},
+{name: 'Pete', country: 'AU'}
+  ]
+}

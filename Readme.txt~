@@ -1,0 +1,15 @@
+Readme.txt
+
+This document details how HTML, JavaScript and JSON are used to obtain RSS data from Apple. The RSS data is saved
+on the server in 3 forms. One must be sure to have json-query, fs, feedparser & request, in addtion to node.js installed. In order
+to test the program out at the start, try utilizing its current data state and having a Web server running on port 8000. All
+one should do is view the IP + :8000 + tire.html. One can see that the page displays 3 items. These are applications
+which have changed in price in less than 24 hours. Matching is done using the title attribute of the apps JSON record. A
+couple enhancements would be collecting and matching on URL (instead of title) and displaying the old price with a slash 
+through it.
+
+Here are the programs which comprise this application:
+
+1) test.js should be run as "node test.js" once every 24 hours at around 17:00 to update the application list (the.json);
+2) getNewRSS.js should be run once every 15 minutes starting at 17:15 to get the latest applications and prices (theNew.json);
+3) right after 2 completes execution, rose.js should be run as "node rose.js" to geneate the hits file, 
